@@ -8,18 +8,6 @@ import plotly.graph_objects as go
 import plotly.express as px
 import pyqtgraph as pt
 
-def test():
-    # Download data set from plotly repo
-    pts = np.loadtxt(np.DataSource().open('https://raw.githubusercontent.com/plotly/datasets/master/mesh_dataset.txt'))
-    x, y, z = pts.T
-
-    print(x)
-    print(y)
-    print(z)
-
-    fig = go.Figure(data=[go.Mesh3d(x=x, y=y, z=z, color='lightpink', opacity=0.50)])
-    fig.show()
-
 
 offName = "OFF/bague.off"
     
@@ -67,16 +55,8 @@ def extractDataFromOFF(offName):
 sommets,faces=extractDataFromOFF(offName)
 sommets=np.array(sommets)
 print(sommets)
-
 faces = np.array(faces)
 #print(faces)
-
-#Matplot
-fig=p.figure()
-ax=p3.Axes3D(fig)
-ax.scatter(sommets[:,0], sommets[:,1], sommets[:,2])
-ax.plot_trisurf(sommets[:,0], sommets[:,1], sommets[:,2],cmap='viridis',edgecolor='none')
-#plt.show()
 
 #Plotly
 fig = go.Figure(data=[
