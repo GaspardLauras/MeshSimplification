@@ -6,7 +6,7 @@ import mpl_toolkits.mplot3d.axes3d as p3
 from matplotlib.tri import Triangulation
 import plotly.graph_objects as go
 import plotly.express as px
-import pyqtgraph as pt
+
 
 
 offName = "OFF/bague.off"
@@ -54,18 +54,41 @@ def extractDataFromOFF(offName):
 
 sommets,faces=extractDataFromOFF(offName)
 sommets=np.array(sommets)
-print(sommets)
+#print(sommets)
 faces = np.array(faces)
 #print(faces)
+
 
 #Plotly
 fig = go.Figure(data=[
     go.Scatter3d(
+        mode = 'markers',
         x=sommets[:,0], 
         y=sommets[:,1], 
-        z=sommets[:,2])
-    ]
+        z=sommets[:,2],
+        marker=dict(
+            size=2
+        )
+    )] 
 )
-fig.show()
+fig.update_layout(scene = dict(
+    xaxis = dict(
+            backgroundcolor="rgb(255,255,255)",
+            gridcolor="white",
+            showbackground=True,
+            zerolinecolor="white",),
+    yaxis = dict(
+            backgroundcolor="rgb(255,255,255)",
+            gridcolor="white",
+            showbackground=True,
+            zerolinecolor="white",),
+    zaxis = dict(
+            backgroundcolor="rgb(255,255,255)",
+            gridcolor="white",
+            showbackground=True,
+            zerolinecolor="white",),),
+)
+
+#fig.show()
 
 
