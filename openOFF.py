@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import mpl_toolkits.mplot3d.axes3d as p3
 from matplotlib.tri import Triangulation
 import plotly.graph_objects as go
+import plotly.express as px
 import pyqtgraph as pt
 
 def test():
@@ -78,8 +79,13 @@ ax.plot_trisurf(sommets[:,0], sommets[:,1], sommets[:,2],cmap='viridis',edgecolo
 #plt.show()
 
 #Plotly
-fig = go.Figure(data=[go.Mesh3d(x=sommets[:,0], y=sommets[:,1], z=sommets[:,2], color='lightpink', opacity=0.50)])
+fig = go.Figure(data=[
+    go.Scatter3d(
+        x=sommets[:,0], 
+        y=sommets[:,1], 
+        z=sommets[:,2])
+    ]
+)
 fig.show()
 
-#PyqtGraph
-#pt.plot(sommets[:,:2])
+
