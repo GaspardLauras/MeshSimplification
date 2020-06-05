@@ -29,25 +29,49 @@ def planEquation(threePointsCoords): #
     print('Kp : \n',p*pt) """
     return p,pt
 
+def Kp(p,pt):
+    return p*pt
+    
 
 
-
-offName = "OFF/tri_gargoyle.off"
+offName = "OFF/test.off"
 #Extraction des données
 mesh = meshio.read(filename=offName,file_format="off")
 sommets = mesh.points
 faces = mesh.cells[0].data
 
-Q=[]
-for points in faces:
-    p,pt = planEquation(sommets[points])
-    Q.append(p*pt)
+points_in_surface = [[] for i in range(len(sommets))]
 
-Q = np.sum(np.array(Q),axis=0) #Valentin le BOSS
-print(Q)
+#
+for i in range(len(sommets)):
+    for j in range(len(faces)):
+        if i in faces[j]:
+            points_in_surface[i].append(faces[j])
+
+points_in_surface = np.array(points_in_surface)
+#print(points_in_surface)
+
+Kps = [[] for i in range(len(sommets))]
+for i in range(len(points_in_surface)) :
+    surface_liste = points_in_surface[i]
+    for surface in surface_liste:
+        p,pt = planEquation(faces[surface])
+        Kp = p*pt
+        Kps[i].append(Kp)
+    Kps[i]  = np.array(Kps[i])
+
+""" Q = []
+
+for i in Kps:
+    #print(i)
+    Q.append(np.sum(i, axis=0))
 
 
-planEquation(sommets[faces[0]])
+print('Q : \n',Q)
+
+deltaVs = []
+for i in range(len(sommets)):
+    deltaVs.append(sommets[i]*Q[i]*sommets[i][np.newaxis].T) """
 
 #plotMesh(sommets,faces,offName)
 
