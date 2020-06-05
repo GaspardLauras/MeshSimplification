@@ -38,6 +38,15 @@ mesh = meshio.read(filename=offName,file_format="off")
 sommets = mesh.points
 faces = mesh.cells[0].data
 
+Q=[]
+for points in faces:
+    p,pt = planEquation(sommets[points])
+    Q.append(p*pt)
+
+Q = np.sum(np.array(Q),axis=0) #Valentin le BOSS
+print(Q)
+
+
 planEquation(sommets[faces[0]])
 
 #plotMesh(sommets,faces,offName)
