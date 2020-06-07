@@ -29,7 +29,20 @@ def planEquation(threePointsCoords): #
     print('Kp : \n',p*pt) """
     return p,pt
 
-    
+def validPairs(sommets,faces):
+    validPairs = []
+    for i in range (len(faces)):
+        for j in range (len(faces[i])):
+            for j2 in range (len(faces[i])):
+                if j != j2:
+                    """ print(faces[i][j],faces[i][j2])
+                    print(sommets[j],sommets[j2]) """
+                    validPairs.append(np.array((sommets[j],sommets[j2])))
+    validPairs = np.array(validPairs)
+    return validPairs
+
+""" 3 0 1 2
+3 1 3 2"""
 
 
 offName = "OFF/test.off"
@@ -41,6 +54,7 @@ mesh = meshio.read(filename=offName,file_format="off")
 sommets = mesh.points
 faces = mesh.cells[0].data
 
+validPairs = validPairs(sommets,faces)
 
 #########################################
 #   Surfaces passant par chaque point:  #
@@ -74,7 +88,7 @@ for i in Kps:
     #print(i)
     Q.append(np.sum(i, axis=0))
 Q = np.array(Q)
-print('Q : \n', Q)
+#print('Q : \n', Q)
 
 
 #########################################
@@ -85,7 +99,7 @@ for i in range(len(sommets)):
     v = np.concatenate((sommets[i],np.array([1])), axis=0)
     deltaVs.append(v[np.newaxis].T*Q[i]*v)
 deltaVs = np.array(deltaVs)
-print('Deltas V : \n',deltaVs)
+#print('Deltas V : \n',deltaVs)
 
 
 #plotMesh(sommets,faces,offName)
