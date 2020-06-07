@@ -30,19 +30,20 @@ def planEquation(threePointsCoords): #
     return p,pt
 
 def validPairs(sommets,faces):
-    validPairs = []
+    validPairsCoords = []
+    validPairsIndex = []
     for i in range (len(faces)):
         for j in range (len(faces[i])):
             for j2 in range (len(faces[i])):
                 if j != j2:
                     """ print(faces[i][j],faces[i][j2])
                     print(sommets[j],sommets[j2]) """
-                    validPairs.append(np.array((sommets[j],sommets[j2])))
-    validPairs = np.array(validPairs)
-    return validPairs
+                    validPairsCoords.append(np.array((sommets[j],sommets[j2])))
+                    validPairsIndex.append(np.array((faces[i][j],faces[i][j2])))
+    """ validPairsCoords = np.array(validPairsCoords)
+    validPairsIndex = np.array(validPairsIndex) """
+    return validPairsCoords,validPairsIndex
 
-""" 3 0 1 2
-3 1 3 2"""
 
 
 offName = "OFF/test.off"
@@ -54,7 +55,8 @@ mesh = meshio.read(filename=offName,file_format="off")
 sommets = mesh.points
 faces = mesh.cells[0].data
 
-validPairs = validPairs(sommets,faces)
+validPairsCoords,validPairsIndex = validPairs(sommets,faces)
+print(type(validPairsIndex[0]))
 
 #########################################
 #   Surfaces passant par chaque point:  #
