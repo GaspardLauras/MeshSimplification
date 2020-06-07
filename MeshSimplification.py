@@ -29,28 +29,33 @@ def planEquation(threePointsCoords): #
     print('Kp : \n',p*pt) """
     return p,pt
 
-def Kp(p,pt):
-    return p*pt
     
 
 
 offName = "OFF/test.off"
-#Extraction des données
+
+#########################################
+#       Extraction des données:         #
+#########################################
 mesh = meshio.read(filename=offName,file_format="off")
 sommets = mesh.points
 faces = mesh.cells[0].data
 
-points_in_surface = [[] for i in range(len(sommets))]
 
-#
+#########################################
+#   Surfaces passant par chaque point:  #
+#########################################
+points_in_surface = [[] for i in range(len(sommets))]
 for i in range(len(sommets)):
     for j in range(len(faces)):
         if i in faces[j]:
             points_in_surface[i].append(faces[j])
-
 points_in_surface = np.array(points_in_surface)
-#print(points_in_surface)
 
+
+#########################################
+#     Calcul de Kp pour chaque point:   #
+#########################################
 Kps = [[] for i in range(len(sommets))]
 for i in range(len(points_in_surface)) :
     surface_liste = points_in_surface[i]
@@ -60,18 +65,28 @@ for i in range(len(points_in_surface)) :
         Kps[i].append(Kp)
     Kps[i]  = np.array(Kps[i])
 
-""" Q = []
 
+#########################################
+#     Calcul de Q pour chaque points    #
+#########################################
+Q = []
 for i in Kps:
     #print(i)
     Q.append(np.sum(i, axis=0))
+Q = np.array(Q)
+print('Q : \n', Q)
 
 
-print('Q : \n',Q)
-
+#########################################
+#          Calcul de /\(v)              #
+#########################################
 deltaVs = []
 for i in range(len(sommets)):
-    deltaVs.append(sommets[i]*Q[i]*sommets[i][np.newaxis].T) """
+    v = np.concatenate((sommets[i],np.array([1])), axis=0)
+    deltaVs.append(v[np.newaxis].T*Q[i]*v)
+deltaVs = np.array(deltaVs)
+print('Deltas V : \n',deltaVs)
+
 
 #plotMesh(sommets,faces,offName)
 
