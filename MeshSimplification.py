@@ -40,8 +40,8 @@ def validPairs(sommets,faces):
                     print(sommets[j],sommets[j2]) """
                     validPairsCoords.append(np.array((sommets[j],sommets[j2])))
                     validPairsIndex.append(np.array((faces[i][j],faces[i][j2])))
-    """ validPairsCoords = np.array(validPairsCoords)
-    validPairsIndex = np.array(validPairsIndex) """
+    validPairsCoords = np.array(validPairsCoords)
+    validPairsIndex = np.array(validPairsIndex)
     return validPairsCoords,validPairsIndex
 
 
@@ -54,9 +54,7 @@ offName = "OFF/test.off"
 mesh = meshio.read(filename=offName,file_format="off")
 sommets = mesh.points
 faces = mesh.cells[0].data
-
 validPairsCoords,validPairsIndex = validPairs(sommets,faces)
-print(type(validPairsIndex[0]))
 
 #########################################
 #   Surfaces passant par chaque point:  #
@@ -67,6 +65,7 @@ for i in range(len(sommets)):
         if i in faces[j]:
             points_in_surface[i].append(faces[j])
 points_in_surface = np.array(points_in_surface)
+print(points_in_surface)
 
 
 #########################################
@@ -81,7 +80,6 @@ for i in range(len(points_in_surface)) :
         Kps[i].append(Kp)
     Kps[i]  = np.array(Kps[i])
 
-
 #########################################
 #     Calcul de Q pour chaque points    #
 #########################################
@@ -90,7 +88,7 @@ for i in Kps:
     #print(i)
     Q.append(np.sum(i, axis=0))
 Q = np.array(Q)
-#print('Q : \n', Q)
+print('Q : \n', Q)
 
 
 #########################################
