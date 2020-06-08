@@ -39,3 +39,10 @@ def validPairs(sommets,faces):
     validPairsCoords = np.array(validPairsCoords)
     validPairsIndex = np.array(validPairsIndex)
     return validPairsCoords,validPairsIndex
+
+
+def Pairs(x):
+    
+    for i in x:
+        
+        validPairsCoords,validPairsIndex
