@@ -1,48 +1,10 @@
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-from MeshPlot import plotMesh
 import numpy as np
 import meshio
-
-def planEquation(threePointsCoords): #
-    """
-    Fonction qui renvoie l'équation du plan défini par les trois points en 
-    paramètre sous la forme ax+by+cz+d=0
-    P1,P2,P3 vecteurs numpy np.array([x,y,z]) représentant les coordonnées des
-    trois points délimitant la surface et donc le plan.
-    """
-    p1,p2,p3 = threePointsCoords
-    v1 = p2-p1
-    v2 = p3-p1 
-    
-    vn = np.cross(v1,v2)
-    a,b,c = vn
-    one = a**2+b**2+c**2
-    vn = vn/np.sqrt(one)
-    d = np.dot(vn, p3)
-    #print('{0}x+{1}y+{2}z+{3}'.format(a,b,c,d))
-
-    p = np.array([a,b,c,d])
-    pt = p[np.newaxis].T 
-    """ print(p)
-    print(pt)
-    print('Kp : \n',p*pt) """
-    return p,pt
-
-def validPairs(sommets,faces):
-    validPairsCoords = []
-    validPairsIndex = []
-    for i in range (len(faces)):
-        for j in range (len(faces[i])):
-            for j2 in range (len(faces[i])):
-                if j != j2:
-                    """ print(faces[i][j],faces[i][j2])
-                    print(sommets[j],sommets[j2]) """
-                    validPairsCoords.append(np.array((sommets[j],sommets[j2])))
-                    validPairsIndex.append(np.array((faces[i][j],faces[i][j2])))
-    validPairsCoords = np.array(validPairsCoords)
-    validPairsIndex = np.array(validPairsIndex)
-    return validPairsCoords,validPairsIndex
+from MeshPlot import plotMesh
+from SimplificationFonctions import *
+from Sommet import Sommet
 
 
 
@@ -65,7 +27,7 @@ for i in range(len(sommets)):
         if i in faces[j]:
             points_in_surface[i].append(faces[j])
 points_in_surface = np.array(points_in_surface)
-print(points_in_surface)
+#print(points_in_surface)
 
 
 #########################################
@@ -88,7 +50,7 @@ for i in Kps:
     #print(i)
     Q.append(np.sum(i, axis=0))
 Q = np.array(Q)
-print('Q : \n', Q)
+#print('Q : \n', Q)
 
 
 #########################################
@@ -100,6 +62,14 @@ for i in range(len(sommets)):
     deltaVs.append(v[np.newaxis].T*Q[i]*v)
 deltaVs = np.array(deltaVs)
 #print('Deltas V : \n',deltaVs)
+
+sommetsCLass = []
+for i in range(len(sommets)):
+    sommetsCLass.append(Sommet(sommets[i]))
+    sommetsCLass[-1].set_Kp(Kps[i])
+    sommetsCLass[-1].set_Q(Q[i])
+    sommetsCLass[-1].set_surfaces(points_in_surface[i])
+    print(sommetsCLass[i].__dict__)
 
 
 #plotMesh(sommets,faces,offName)
