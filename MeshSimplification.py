@@ -17,6 +17,17 @@ mesh = meshio.read(filename=offName,file_format="off")
 sommets = mesh.points
 faces = mesh.cells[0].data
 validPairsCoords,validPairsIndex = validPairs(sommets,faces)
+print("ValidPairsCoords")
+print(validPairsCoords)
+print("ValidPairsIndex")
+print(validPairsIndex)
+
+#########################################
+#      Gestion des doublons:         #
+#########################################
+simplePairsIndex= Pairs(validPairsIndex)
+print("GestionPairsCoords")
+print(simplePairsIndex)
 
 #########################################
 #   Surfaces passant par chaque point:  #
@@ -69,7 +80,7 @@ for i in range(len(sommets)):
     sommetsCLass[-1].set_Kp(Kps[i])
     sommetsCLass[-1].set_Q(Q[i])
     sommetsCLass[-1].set_surfaces(points_in_surface[i])
-    print(sommetsCLass[i].__dict__)
+    #print(sommetsCLass[i].__dict__)
 
 
 #plotMesh(sommets,faces,offName)

@@ -42,7 +42,10 @@ def validPairs(sommets,faces):
 
 
 def Pairs(x):
-    
-    for i in x:
-        
-        validPairsCoords,validPairsIndex
+    new_Pairs = []
+    if x is not None:
+        for i in x:
+            if i not in new_Pairs: 
+                new_Pairs.append(i)
+    new_Pairs = np.array(new_Pairs)
+    return new_Pairs      
