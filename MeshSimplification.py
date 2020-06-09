@@ -73,6 +73,10 @@ for i in range(len(sommets)):
 deltaVs = np.array(deltaVs)
 #print('Deltas V : \n',deltaVs)
 
+
+#########################################
+#            Objets sommets             #
+#########################################
 sommetsCLass = []
 for i in range(len(sommets)):
     sommetsCLass.append(Sommet(sommets[i]))
