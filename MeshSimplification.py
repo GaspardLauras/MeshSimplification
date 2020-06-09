@@ -17,17 +17,16 @@ mesh = meshio.read(filename=offName,file_format="off")
 sommets = mesh.points
 faces = mesh.cells[0].data
 validPairsCoords,validPairsIndex = validPairs(sommets,faces)
-print("ValidPairsCoords")
+""" print("ValidPairsCoords")
 print(validPairsCoords)
 print("ValidPairsIndex")
 print(validPairsIndex)
-
+ """
 #########################################
 #      Gestion des doublons:         #
 #########################################
-simplePairsIndex= Pairs(validPairsIndex)
-print("GestionPairsCoords")
-print(simplePairsIndex)
+simplePairsIndex = Pairs(validPairsIndex)
+simplePairsCoords = sommets[simplePairsIndex]
 
 #########################################
 #   Surfaces passant par chaque point:  #

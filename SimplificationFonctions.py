@@ -45,7 +45,8 @@ def Pairs(x):
     new_Pairs = []
     if x is not None:
         for i in x:
-            if i not in new_Pairs: 
-                new_Pairs.append(i)
+            if not ( ([i[0],i[1]] in new_Pairs) or ([i[1],i[0]] in new_Pairs) ) : 
+                new_Pairs.append([i[0],i[1]])
     new_Pairs = np.array(new_Pairs)
+
     return new_Pairs      
