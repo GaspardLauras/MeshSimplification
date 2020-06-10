@@ -12,21 +12,15 @@ offName = "OFF/test.off"
 
 #########################################
 #       Extraction des données:         #
+#        Gestion des doublons:          #
 #########################################
 mesh = meshio.read(filename=offName,file_format="off")
 sommets = mesh.points
 faces = mesh.cells[0].data
-validPairsCoords,validPairsIndex = validPairs(sommets,faces)
-""" print("ValidPairsCoords")
-print(validPairsCoords)
-print("ValidPairsIndex")
-print(validPairsIndex)
- """
-#########################################
-#      Gestion des doublons:         #
-#########################################
-simplePairsIndex = Pairs(validPairsIndex)
-simplePairsCoords = sommets[simplePairsIndex]
+validPairsIndex = validPairs(sommets,faces)
+print('Valides pairs index : \n',validPairsIndex)
+print('________________________')
+
 
 #########################################
 #   Surfaces passant par chaque point:  #
@@ -36,25 +30,26 @@ for f in faces:
     for i in f:
         points_in_surface[i].append(f)
 points_in_surface = np.array(points_in_surface)
-print(points_in_surface)
-
-"""
-Parcourir la liste des triangles
-pour réduire le temps de calcul
-"""
+print('Points in surfaces : \n',points_in_surface)
+print('________________________')
 
 
 #########################################
 #     Calcul de Kp pour chaque point:   #
 #########################################
-Kps = [[] for i in range(len(sommets))]
+Kps = []
 for i in range(len(points_in_surface)) :
     surface_liste = points_in_surface[i]
+    Kpi = []
     for surface in surface_liste:
         p,pt = planEquation(faces[surface])
         Kp = p*pt
-        Kps[i].append(Kp)
-    Kps[i]  = np.array(Kps[i])
+        Kpi.append(Kp)
+    Kps.append(Kp)
+Kps = np.array(Kps)
+print('Kps : \n',Kps)
+print('________________________')
+
 
 #########################################
 #     Calcul de Q pour chaque points    #
@@ -64,8 +59,8 @@ for i in Kps:
     #print(i)
     Q.append(np.sum(i, axis=0))
 Q = np.array(Q)
-#print('Q : \n', Q)
-
+print('Q : \n', Q)
+print('________________________')
 
 #########################################
 #          Calcul de /\(v)              #
@@ -76,7 +71,7 @@ for i in range(len(sommets)):
     deltaVs.append(v[np.newaxis].T*Q[i]*v)
 deltaVs = np.array(deltaVs)
 #print('Deltas V : \n',deltaVs)
-
+#print('________________________')
 
 #########################################
 #            Objets sommets             #

@@ -26,27 +26,18 @@ def planEquation(threePointsCoords): #
     return p,pt
 
 def validPairs(sommets,faces):
-    validPairsCoords = []
+    #C'est aussi l'oeuvre de Valentin <3
     validPairsIndex = []
-    for i in range (len(faces)):
-        for j in range (len(faces[i])):
-            for j2 in range (len(faces[i])):
-                if j != j2:
-                    """ print(faces[i][j],faces[i][j2])
-                    print(sommets[j],sommets[j2]) """
-                    validPairsCoords.append(np.array((sommets[j],sommets[j2])))
-                    validPairsIndex.append(np.array((faces[i][j],faces[i][j2])))
-    validPairsCoords = np.array(validPairsCoords)
+    for i in faces:
+        if not ( ([i[0],i[1]] in validPairsIndex) or ([i[1],i[0]] in validPairsIndex) ) :
+            validPairsIndex.append([i[0],i[1]])
+
+        if not ( ([i[0],i[2]] in validPairsIndex) or ([i[2],i[0]] in validPairsIndex) ) :
+            validPairsIndex.append([i[0],i[2]])
+
+        if not ( ([i[1],i[2]] in validPairsIndex) or ([i[2],i[1]] in validPairsIndex) ) :
+            validPairsIndex.append([i[1],i[2]])
+
     validPairsIndex = np.array(validPairsIndex)
-    return validPairsCoords,validPairsIndex
-
-
-def Pairs(x):
-    new_Pairs = []
-    if x is not None:
-        for i in x:
-            if not ( ([i[0],i[1]] in new_Pairs) or ([i[1],i[0]] in new_Pairs) ) : 
-                new_Pairs.append([i[0],i[1]])
-    new_Pairs = np.array(new_Pairs)
-
-    return new_Pairs      
+    return validPairsIndex
+    
