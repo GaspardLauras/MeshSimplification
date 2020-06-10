@@ -25,7 +25,7 @@ def planEquation(threePointsCoords): #
     print('Kp : \n',p*pt) """
     return p,pt
 
-def validPairs(sommets,faces):
+def get_validPairs(sommets,faces):
     #C'est aussi l'oeuvre de Valentin <3
     validPairsIndex = []
     for i in faces:
@@ -41,3 +41,48 @@ def validPairs(sommets,faces):
     validPairsIndex = np.array(validPairsIndex)
     return validPairsIndex
     
+def get_Points_in_surface(sommets,faces):
+    points_in_surface = [[] for i in range(len(sommets))]
+    for f in faces:
+        for i in f:
+            points_in_surface[i].append(f)
+    points_in_surface = np.array(points_in_surface)
+    #print('Points in surfaces : \n',points_in_surface)
+    #print('________________________')
+    return points_in_surface
+
+def get_Kps(faces,points_in_surface):
+    Kps = []
+    for i in range(len(points_in_surface)) :
+        surface_liste = points_in_surface[i]
+        Kpi = []
+        for surface in surface_liste:
+            p,pt = planEquation(faces[surface])
+            Kp = p*pt
+            Kpi.append(np.array(Kp))
+        Kps.append(np.array(Kpi))
+    Kps = np.array(Kps)
+    #print('Kps : \n',Kps)
+    #print('________________________')
+    return Kps
+
+def get_Q(Kps):
+    Q = []
+    for i in Kps:
+        #print(i)
+        Q.append(np.sum(i, axis=0))
+    Q = np.array(Q)
+    #print('Q : \n', Q)
+    #print('________________________')
+    return Q
+
+def get_deltaVs(sommets,Q):
+    deltaVs = []
+    for i in range(len(sommets)):
+        v = np.concatenate((sommets[i],np.array([1])), axis=0)
+        deltaVs.append(v[np.newaxis].T*Q[i]*v)
+    deltaVs = np.array(deltaVs)
+    #print('Deltas V : \n',deltaVs)
+    #print('________________________')
+    return deltaVs
+
