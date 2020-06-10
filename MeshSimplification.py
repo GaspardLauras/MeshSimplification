@@ -18,8 +18,8 @@ mesh = meshio.read(filename=offName,file_format="off")
 sommets = mesh.points
 faces = mesh.cells[0].data
 validPairsIndex = validPairs(sommets,faces)
-print('Valides pairs index : \n',validPairsIndex)
-print('________________________')
+#print('Valides pairs index : \n',validPairsIndex)
+#print('________________________')
 
 
 #########################################
@@ -30,8 +30,8 @@ for f in faces:
     for i in f:
         points_in_surface[i].append(f)
 points_in_surface = np.array(points_in_surface)
-print('Points in surfaces : \n',points_in_surface)
-print('________________________')
+#print('Points in surfaces : \n',points_in_surface)
+#print('________________________')
 
 
 #########################################
@@ -44,11 +44,11 @@ for i in range(len(points_in_surface)) :
     for surface in surface_liste:
         p,pt = planEquation(faces[surface])
         Kp = p*pt
-        Kpi.append(Kp)
-    Kps.append(Kp)
+        Kpi.append(np.array(Kp))
+    Kps.append(np.array(Kpi))
 Kps = np.array(Kps)
-print('Kps : \n',Kps)
-print('________________________')
+#print('Kps : \n',Kps)
+#print('________________________')
 
 
 #########################################
@@ -59,8 +59,9 @@ for i in Kps:
     #print(i)
     Q.append(np.sum(i, axis=0))
 Q = np.array(Q)
-print('Q : \n', Q)
-print('________________________')
+#print('Q : \n', Q)
+#print('________________________')
+
 
 #########################################
 #          Calcul de /\(v)              #
@@ -70,8 +71,9 @@ for i in range(len(sommets)):
     v = np.concatenate((sommets[i],np.array([1])), axis=0)
     deltaVs.append(v[np.newaxis].T*Q[i]*v)
 deltaVs = np.array(deltaVs)
-#print('Deltas V : \n',deltaVs)
-#print('________________________')
+print('Deltas V : \n',deltaVs)
+print('________________________')
+
 
 #########################################
 #            Objets sommets             #
@@ -87,8 +89,3 @@ for i in range(len(sommets)):
 
 #plotMesh(sommets,faces,offName)
 
-
-
-"""
-
-"""
