@@ -32,12 +32,16 @@ simplePairsCoords = sommets[simplePairsIndex]
 #   Surfaces passant par chaque point:  #
 #########################################
 points_in_surface = [[] for i in range(len(sommets))]
-for i in range(len(sommets)):
-    for j in range(len(faces)):
-        if i in faces[j]:
-            points_in_surface[i].append(faces[j])
+for f in faces:
+    for i in f:
+        points_in_surface[i].append(f)
 points_in_surface = np.array(points_in_surface)
-#print(points_in_surface)
+print(points_in_surface)
+
+"""
+Parcourir la liste des triangles
+pour réduire le temps de calcul
+"""
 
 
 #########################################
@@ -90,3 +94,6 @@ for i in range(len(sommets)):
 
 
 
+"""
+
+"""

@@ -8,6 +8,7 @@ class Sommet:
         - son Q
         - les surfaces passant par ce sommet
     """
+    #Peut etre supprimer les Kp et les surfaces
 
     def __init__(self, coords):
         self.coords = coords
