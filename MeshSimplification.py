@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 import meshio
-from MeshPlot import plotMesh
+from MeshPlot import *
 from SimplificationFonctions import *
 from Sommet import Sommet
 
@@ -18,7 +18,7 @@ def init(sommets,faces):
         sommetsCLass[-1].set_Kp(Kps[i])
         sommetsCLass[-1].set_Q(Q[i])
         sommetsCLass[-1].set_surfaces(points_in_surface[i])
-    return sommetsCLass
+    return validPairsIndex,sommetsCLass
 
 offName = "OFF/test.off"
 
@@ -30,8 +30,30 @@ mesh = meshio.read(filename=offName,file_format="off")
 sommets = mesh.points
 faces = mesh.cells[0].data
 
-init(sommets,faces)
+validPairsIndex, sommets = init(sommets,faces)
+#print(sommets)
 
+newSommet = []
+for pair in validPairsIndex:
+    Q = sommets[pair[0]].Q + sommets[pair[1]].Q 
+    Qp = [[Q[0][0],Q[0][1],Q[0][2],Q[0][3]],
+          [Q[0][1],Q[1][1],Q[1][2],Q[1][3]],
+          [Q[0][2],Q[1][2],Q[2][2],Q[2][3]],
+          [   0   ,   0   ,   0   ,   1   ]]
+    Qp = np.array(Qp)
+    #print('Qp : \n',Qp)
+    #print('Det : \n',np.linalg.det(Qp))
+    Qp = np.linalg.inv(Qp)
+    #print('Qp-1 : \n',Qp)
+
+    #print('----')
+    v = Qp @ np.array([[0],[0],[0],[1]])
+    #print('new V : \n',v)
+    newSommet.append([v[0],v[1],v[2]])
+    #print('----------')
+newSommet = np.array(newSommet)
+print(newSommet)
+plotScatter(newSommet,offName)
 
 #plotMesh(sommets,faces,offName)
 
