@@ -39,6 +39,8 @@ def get_validPairs(sommets,faces):
             validPairsIndex.append([i[1],i[2]])
 
     validPairsIndex = np.array(validPairsIndex)
+    #print('Valides pairs index : \n',validPairsIndex)
+    #print('________________________')
     return validPairsIndex
     
 def get_Points_in_surface(sommets,faces):
