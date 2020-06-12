@@ -29,6 +29,8 @@ offName = "OFF/test.off"
 mesh = meshio.read(filename=offName,file_format="off")
 sommets = mesh.points
 faces = mesh.cells[0].data
+#plotMesh(sommets,faces,offName)
+plotScatter(sommets,offName)
 
 validPairsIndex, sommets = init(sommets,faces)
 #print(sommets)
@@ -54,6 +56,3 @@ for pair in validPairsIndex:
 newSommet = np.array(newSommet)
 print(newSommet)
 plotScatter(newSommet,offName)
-
-#plotMesh(sommets,faces,offName)
-

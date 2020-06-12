@@ -1,31 +1,20 @@
 import plotly.graph_objects as go
 import plotly.express as px
+import numpy as np
 
 def plotScatter(sommets,offName):
-    #fig = go.Figure(data=[go.Scatter3d(x=sommets[:,0], y=sommets[:,1], z=sommets[:,2],mode='markers')])
-    fig = go.Figure(data=[go.Scatter3d(x=[0,1,2,3,-1,-2,-3], y=[0,1,2,3,-1,-2,-3], z=[0,1,2,3,-1,-2,-3],mode='markers')])
-    config = dict({'scrollZoom': True})
-    fig.update_layout(scene = dict(
-        xaxis = dict(
-                gridcolor="white",
-                showbackground=True,
-                zerolinecolor="black"
-            ),
-            yaxis = dict(
-                gridcolor="white",
-                showbackground=True,
-                zerolinecolor="black"
-            ),
-            zaxis = dict(
-                gridcolor="white",
-                showbackground=True,
-                zerolinecolor="black"
-            ),
-        ),
-        template='plotly_dark',
-        title=offName
+    fig = go.Figure(data=[go.Scatter3d(
+    x=sommets[:,0], 
+    y=sommets[:,1], 
+    z=sommets[:,2],
+    mode='markers',
+    marker=dict(
+        size=12,
+        color=sommets[:,2],                # set color to an array/list of desired values
+        opacity=0.8
     )
-    fig.show(config = config)
+    )])
+    fig.show()
 
 def plotMesh(sommets,faces,offName):
     """
