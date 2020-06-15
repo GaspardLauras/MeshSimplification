@@ -41,6 +41,7 @@ print(validPairsIndex)
 print('---------------------------------')
 
 newSommet = []
+"""  """
 for pair in validPairsIndex:
     Q = sommets[pair[0]].Q + sommets[pair[1]].Q 
     Qp = [[Q[0][0],Q[0][1],Q[0][2],Q[0][3]],
@@ -49,7 +50,7 @@ for pair in validPairsIndex:
           [   0   ,   0   ,   0   ,   1   ]]
     Qp = np.array(Qp)
     #print('Qp : \n',Qp)
-    #print('Det : \n',np.linalg.det(Qp))
+    print('Det : \n',np.linalg.det(Qp))
     Qp = np.linalg.inv(Qp)
     #print('Qp^-1 : \n',Qp)
 
@@ -58,7 +59,19 @@ for pair in validPairsIndex:
     #print('new V : \n',v)
     newSommet.append(v[0:3])
     #print('----------')
+
+"""
+Ici on a tous les "points candidats"
+Calculer le cout de chaque point candidat D(v) = vT*Q*v
+On prend celle qui a le cout le plus faible
+Refaire la meme chose avec le nouveau mesh
+
+A TROUVER : QUAND EST-CE QU'ON S'ARRETE??
+"""
+
+
+
 newSommet = np.array(newSommet)
-print(newSommet)
-print(len(newSommet))
+#print(newSommet)
+#print(len(newSommet))
 #plotScatter(newSommet,offName)

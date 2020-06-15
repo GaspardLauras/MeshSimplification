@@ -11,24 +11,25 @@ def planEquation(threePointsCoords): #
     v1 = p2-p1
     v2 = p3-p1 
     
-    vn = np.cross(v1,v2)
+    #prendre le max de p1-p2 =m
+    #Si m < 1 alors on multiplie par l'inverse de m
+    """
+    remplacer la fonction cross dans planEquation()par une fonction faite maison
+    """
+    vn = np.cross(v1/np.linalg.norm(v1),v2/np.linalg.norm(v2))
+    
     a,b,c = vn
-    a = a/1000
-    b = b/1000
-    c = c/1000
     #print('a b c :',a,b,c)
-    one = a**2+b**2+c**2
-    vn = vn/np.sqrt(one)
+    vn = vn/np.sqrt(a**2+b**2+c**2)
     d = np.dot(vn, p3)
     #print('{0}x+{1}y+{2}z+{3}'.format(a,b,c,d))
 
-    p = np.array([a,b,c,d])
-    pt = p[np.newaxis].T
-    #pt = p[np.newaxis].T 
-    """ print('p : ',p)
-    print('pt : ',pt)
-    print('Kp : \n',p*pt)
-    print('------------')"""
+    p = np.array([[a],[b],[c],[d]])
+    pt = np.array([[a,b,c,d]])
+    #print('p : ',p)
+    #print('pt : ',pt)
+    #print('Kp : \n',p*pt)
+    #print('------------')
     return p,pt
 
 def get_validPairs(sommets,faces):
@@ -66,13 +67,33 @@ def get_Kps(faces,points_in_surface):
         Kpi = []
         for surface in surface_liste:
             p,pt = planEquation(faces[surface])
-            Kp = p*pt
+            Kp = np.dot(p,pt)
             Kpi.append(np.array(Kp))
         Kps.append(np.array(Kpi))
     Kps = np.array(Kps)
     #print('Kps : \n',Kps)
     #print('________________________')
     return Kps
+
+def get_Kps_debug(faces,points_in_surface):
+    Kps = []
+    Qs = []
+    for i in range(len(points_in_surface)) :
+        surface_liste = points_in_surface[i]
+        Kpi = []
+        Q = np.zeros((4,4))
+        for surface in surface_liste:
+            p,pt = planEquation(faces[surface])
+            Kp = np.dot(p,pt)
+            Q = Q+Kp
+            Kpi.append(np.array(Kp))
+        Qs.append(Q)
+        Kps.append(np.array(Kpi))
+    Kps = np.array(Kps)
+    Qs = np.array(Qs)
+    #print('Kps : \n',Kps)
+    #print('________________________')
+    return Kps,Qs
 
 def get_Q(Kps):
     Q = []
