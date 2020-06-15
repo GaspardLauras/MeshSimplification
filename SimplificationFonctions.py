@@ -13,16 +13,22 @@ def planEquation(threePointsCoords): #
     
     vn = np.cross(v1,v2)
     a,b,c = vn
+    a = a/1000
+    b = b/1000
+    c = c/1000
+    #print('a b c :',a,b,c)
     one = a**2+b**2+c**2
     vn = vn/np.sqrt(one)
     d = np.dot(vn, p3)
     #print('{0}x+{1}y+{2}z+{3}'.format(a,b,c,d))
 
     p = np.array([a,b,c,d])
-    pt = p[np.newaxis].T 
-    """ print(p)
-    print(pt)
-    print('Kp : \n',p*pt) """
+    pt = p[np.newaxis].T
+    #pt = p[np.newaxis].T 
+    """ print('p : ',p)
+    print('pt : ',pt)
+    print('Kp : \n',p*pt)
+    print('------------')"""
     return p,pt
 
 def get_validPairs(sommets,faces):
