@@ -44,6 +44,7 @@ newSommet = []
 newKps = []
 """  """
 for pair in validPairsIndex:
+    #print('Pair : ',pair)
     Q = sommets[pair[0]].Q + sommets[pair[1]].Q 
     Qp = [[Q[0][0],Q[0][1],Q[0][2],Q[0][3]],
           [Q[0][1],Q[1][1],Q[1][2],Q[1][3]],
@@ -59,11 +60,12 @@ for pair in validPairsIndex:
     v = Qp.dot(np.array([[0],[0],[0],[1]]))
     newSommet.append(v[0:3])
     vt = np.transpose(v)
-    print('new V : \n',v)
-    print('new vt : \n',vt)
-    Dv = vt*Q*v
-    print('Dv : \n',Dv)
-    print('----------')
+    #print('new V : \n',v)
+    #print('new vt : \n',vt)
+    Dv = (vt@Q@v)[0][0]
+    #print('Dv : \n',Dv)
+    newKps.append(Dv)
+    #print('----------')
 
 """
 Ici on a tous les "points candidats"
@@ -77,6 +79,9 @@ A TROUVER : QUAND EST-CE QU'ON S'ARRETE??
 
 print('--------------------------------')
 newSommet = np.negative(newSommet)
-print(np.array(newSommet[0]))
+newKps = np.array(newKps)
+print('New sommets : \n',newSommet)
+print('New Kps : \n',newKps)
+print(newSommet[np.argmin(newKps)])
 #print(len(newSommet))
 #plotScatterMatplot(np.array([newSommet[1]]),sommetsCoords)
