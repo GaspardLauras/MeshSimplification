@@ -1,6 +1,21 @@
 import plotly.graph_objects as go
 import plotly.express as px
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
+
+def plotScatterMatplot(sommets1, sommets2):
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    ax.scatter(xs=sommets1[:,0],
+    ys=sommets1[:,1], 
+    zs=sommets1[:,2], 
+    c='r',marker='o') 
+    ax.scatter(xs=sommets2[:,0],
+    ys=sommets2[:,1], 
+    zs=sommets2[:,2], 
+    c='b',marker='*') 
+    plt.show()
 
 def plotScatter(sommets,offName):
     fig = go.Figure(data=[go.Scatter3d(

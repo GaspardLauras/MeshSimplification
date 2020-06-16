@@ -32,8 +32,8 @@ offName = "OFF/test.off"
 mesh = meshio.read(filename=offName,file_format="off")
 sommets = mesh.points
 faces = mesh.cells[0].data
-#plotMesh(sommets,faces,offName)
-#plotScatter(sommets,offName)
+plotMesh(sommets,faces,offName)
+sommetsCoords = sommets
 
 validPairsIndex, sommets = init(sommets,faces)
 #print(sommets)
@@ -70,8 +70,8 @@ A TROUVER : QUAND EST-CE QU'ON S'ARRETE??
 """
 
 
-
-newSommet = np.array(newSommet)
-#print(newSommet)
+print('--------------------------------')
+newSommet = -np.array(newSommet)
+print(newSommet)
 #print(len(newSommet))
-#plotScatter(newSommet,offName)
+plotScatterMatplot(newSommet,sommetsCoords)
