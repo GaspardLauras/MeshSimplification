@@ -11,6 +11,7 @@ def calculNormal(vectorList):
     barycentre = np.average(vectorList, axis=0) # calcul du barycentre dans le repère orthogonal d'origine
     d = - np.vdot(vecNormalNorme, barycentre) # calcul de la distance du barycentre au plan
     a, b, c = vecNormalNorme # extraction des coordonnées du vecteur directeur
+    #print(vecNormalNorme)
     vn = [a, b, c]
     return vn
 
@@ -21,20 +22,16 @@ def planEquation(threePointsCoords):
     P1,P2,P3 vecteurs numpy np.array([x,y,z]) représentant les coordonnées des
     trois points délimitant la surface et donc le plan.
     """
-
     p1,p2,p3 = threePointsCoords
     v1 = p2-p1
     v2 = p3-p1 
-
     #print("v1,v2 : ",v1,v2)
     #print('vn : ',vn)
-    v4 = [v1,v2]
-    vn = calculNormal(v4)
+    vn = calculNormal([v1,v2])
     a,b,c = vn
     #print('a,b,c :',a,b,c)
     d = np.dot(vn, p3)
     #print('{0}x+{1}y+{2}z+{3}'.format(a,b,c,d))
-
     p = np.array([[a],[b],[c],[d]])
     pt = np.array([[a,b,c,d]])
     """print('pt : ',pt)

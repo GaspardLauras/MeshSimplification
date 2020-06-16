@@ -32,15 +32,16 @@ offName = "OFF/test.off"
 mesh = meshio.read(filename=offName,file_format="off")
 sommets = mesh.points
 faces = mesh.cells[0].data
-plotMesh(sommets,faces,offName)
+#plotMesh(sommets,faces,offName)
 sommetsCoords = sommets
 
 validPairsIndex, sommets = init(sommets,faces)
 #print(sommets)
-print(validPairsIndex)
-print('---------------------------------')
+#print(validPairsIndex)
+#print('---------------------------------')
 
 newSommet = []
+newKps = []
 """  """
 for pair in validPairsIndex:
     Q = sommets[pair[0]].Q + sommets[pair[1]].Q 
@@ -50,15 +51,19 @@ for pair in validPairsIndex:
           [   0   ,   0   ,   0   ,   1   ]]
     Qp = np.array(Qp)
     #print('Qp : \n',Qp)
-    print('Det : \n',np.linalg.det(Qp))
+    #print('Det : \n',np.linalg.det(Qp))
     Qp = np.linalg.inv(Qp)
     #print('Qp^-1 : \n',Qp)
 
     #print('----')
     v = Qp.dot(np.array([[0],[0],[0],[1]]))
-    #print('new V : \n',v)
     newSommet.append(v[0:3])
-    #print('----------')
+    vt = np.transpose(v)
+    print('new V : \n',v)
+    print('new vt : \n',vt)
+    Dv = vt*Q*v
+    print('Dv : \n',Dv)
+    print('----------')
 
 """
 Ici on a tous les "points candidats"
@@ -71,7 +76,7 @@ A TROUVER : QUAND EST-CE QU'ON S'ARRETE??
 
 
 print('--------------------------------')
-newSommet = -np.array(newSommet)
-print(newSommet)
+newSommet = np.negative(newSommet)
+print(np.array(newSommet[0]))
 #print(len(newSommet))
-plotScatterMatplot(newSommet,sommetsCoords)
+#plotScatterMatplot(np.array([newSommet[1]]),sommetsCoords)
