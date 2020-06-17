@@ -17,8 +17,11 @@ class Sommet:
         self.Kp = kp
         return
 
-    def set_Q(self,Q):
-        self.Q = Q
+    def set_Q(self):
+        self.Q = np.zeros((4,4))
+        for k in self.Kp:
+            self.Q += k
+        print('Q : \n',self.Q)
         return    
 
     def set_surfaces(self,sufaces):

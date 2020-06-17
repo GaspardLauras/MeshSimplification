@@ -9,19 +9,21 @@ from Sommet import Sommet
 def init(sommets,faces):
     #Calcul de Q pour tous les sommets initiaux
     points_in_surface = get_Points_in_surface(sommets,faces)
-    Kps = get_Kps(faces,points_in_surface)
-    Q = get_Q(Kps)
-    deltaVs = get_deltaVs(sommets,Q)
+    Kps = get_Kps(sommets,points_in_surface)
+    #print('Kps : \n',Kps)
+    #Q = get_Q(Kps)
+    #deltaVs = get_deltaVs(sommets,Q)
+    #print(Q)
     sommetsCLass = []
     for i in range(len(sommets)):
         sommetsCLass.append(Sommet(sommets[i]))
         sommetsCLass[-1].set_Kp(Kps[i])
-        sommetsCLass[-1].set_Q(Q[i])
+        sommetsCLass[-1].set_Q()
         sommetsCLass[-1].set_surfaces(points_in_surface[i])
         g = sommetsCLass[-1]
         c = np.concatenate((g.coords, np.array([1])),axis=0)
         #print(c)
-        #print(c@g.Q@c.transpose())
+        print(c@g.Q@c.transpose())
     
     #Selection des paires valides
     validPairsIndex = get_validPairs(sommets,faces)
@@ -82,11 +84,11 @@ A TROUVER : QUAND EST-CE QU'ON S'ARRETE??
 
 
 #print('--------------------------------')
-newSommet = np.negative(newSommet)
+newSommet = np.array(newSommet)
 newKps = np.array(newKps)
 #print('New sommets : \n',newSommet)
 #print('New Kps : \n',newKps)
 #print(newSommet[np.argmin(newKps)])
 #print(len(newSommet))
 #plotScatterMatplot(np.array([newSommet[1]]),sommetsCoords)
-#plotScatterMatplot(newSommet,sommetsCoords)
+plotScatterMatplot(newSommet,sommetsCoords)

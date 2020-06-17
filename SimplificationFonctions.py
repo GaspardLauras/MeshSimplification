@@ -26,18 +26,15 @@ def planEquation(threePointsCoords):
     v1 = p2-p1
     v2 = p3-p1 
     #print("v1,v2 : ",v1,v2)
-    #print('vn : ',vn)
     vn = calculNormal([v1,v2])
+    #print('vn : ',vn)
     a,b,c = vn
     #print('a,b,c :',a,b,c)
-    d = np.dot(vn, p3)
-    #print('{0}x+{1}y+{2}z+{3}'.format(a,b,c,d))
+    d = -(a*p3[0]+b*p3[1]+c*p3[2])
+    #print('{0} x + {1} y + {2} z + {3}'.format(a,b,c,d))
     p = np.array([[a],[b],[c],[d]])
     pt = np.array([[a,b,c,d]])
-    """print('pt : ',pt)
-    print(p)
-    print(pt)
-    print('Kp : \n',p*pt) """
+    """print('Kp : \n',p*pt) """
     return p,pt
 
 def get_validPairs(sommets,faces):
@@ -68,53 +65,25 @@ def get_Points_in_surface(sommets,faces):
     #print('________________________')
     return points_in_surface
 
-def get_Kps(faces,points_in_surface):
+def get_Kps(sommets,points_in_surface):
     Kps = []
-    offName = "OFF/test.off"
-    mesh = meshio.read(filename=offName,file_format="off")
-    faces = mesh.cells[0].data
-    sommets = mesh.points  #coordonnées
-    for i in range(len(points_in_surface)) :
-        surface_liste = points_in_surface[i]
-        #print("surface_liste")
-        #print(surface_liste)
+    for i in range(len(points_in_surface)):
+        point = points_in_surface[i]
         Kpi = []
-        for surface in surface_liste:
-            p,pt = planEquation((sommets[surface[0]],sommets[surface[1]],sommets[surface[2]]))
-            Kp = np.dot(p,pt)
-            Kpi.append(np.array(Kp))
+        for surface in point:
+            p,pt = planEquation(sommets[surface])
+            Kp = p@pt
+            Kpi.append(p@pt)
         Kps.append(np.array(Kpi))
     Kps = np.array(Kps)
-    #print('Kps : \n',Kps)
-    #print('________________________')
     return Kps
 
-def get_Kps_debug(faces,points_in_surface):
-    Kps = []
-    Qs = []
-    for i in range(len(points_in_surface)) :
-        surface_liste = points_in_surface[i]
-        Kpi = []
-        Q = np.zeros((4,4))
-        for surface in surface_liste:
-            p,pt = planEquation(faces[surface])
-            Kp = np.dot(p,pt)
-            Q = Q+Kp
-            Kpi.append(np.array(Kp))
-        Qs.append(Q)
-        Kps.append(np.array(Kpi))
-    Kps = np.array(Kps)
-    Qs = np.array(Qs)
-    #print('Kps : \n',Kps)
-    #print('________________________')
-    return Kps,Qs
-
 def get_Q(Kps):
-    Q = []
-    for i in Kps:
-        #print(i)
-        Q.append(np.sum(i, axis=1))
-    Q = np.array(Q)
+    Q = np.zeros((np.shape(Kps)[0],4,4))
+    for i in range(np.shape(Q)[0]):
+        for j in range(np.size(Kps[i],axis=0)):
+            Q[i] += Kps[i][j]
+    #Q = np.array(Q)
     print('Q : \n', Q)
     #print('________________________')
     return Q
