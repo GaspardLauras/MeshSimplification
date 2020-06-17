@@ -21,7 +21,7 @@ def init(sommets,faces):
         g = sommetsCLass[-1]
         c = np.concatenate((g.coords, np.array([1])),axis=0)
         #print(c)
-        print(c@g.Q@c.transpose())
+        #print(c@g.Q@c.transpose())
     
     #Selection des paires valides
     validPairsIndex = get_validPairs(sommets,faces)

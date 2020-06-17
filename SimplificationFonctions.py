@@ -113,9 +113,9 @@ def get_Q(Kps):
     Q = []
     for i in Kps:
         #print(i)
-        Q.append(np.sum(i, axis=0))
+        Q.append(np.sum(i, axis=1))
     Q = np.array(Q)
-    #print('Q : \n', Q)
+    print('Q : \n', Q)
     #print('________________________')
     return Q
 

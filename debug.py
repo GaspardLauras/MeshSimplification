@@ -39,6 +39,7 @@ res = inv@vec
 
 print(res[:3])
 
+#Ajouter la normalisation
 
 #[[0.98701299]
 # [0.98701299]
