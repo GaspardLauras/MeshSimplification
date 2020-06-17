@@ -18,6 +18,10 @@ def init(sommets,faces):
         sommetsCLass[-1].set_Kp(Kps[i])
         sommetsCLass[-1].set_Q(Q[i])
         sommetsCLass[-1].set_surfaces(points_in_surface[i])
+        g = sommetsCLass[-1]
+        c = np.concatenate((g.coords, np.array([1])),axis=0)
+        #print(c)
+        print(c@g.Q@c.transpose())
     
     #Selection des paires valides
     validPairsIndex = get_validPairs(sommets,faces)
@@ -77,11 +81,12 @@ A TROUVER : QUAND EST-CE QU'ON S'ARRETE??
 """
 
 
-print('--------------------------------')
+#print('--------------------------------')
 newSommet = np.negative(newSommet)
 newKps = np.array(newKps)
-print('New sommets : \n',newSommet)
-print('New Kps : \n',newKps)
-print(newSommet[np.argmin(newKps)])
+#print('New sommets : \n',newSommet)
+#print('New Kps : \n',newKps)
+#print(newSommet[np.argmin(newKps)])
 #print(len(newSommet))
 #plotScatterMatplot(np.array([newSommet[1]]),sommetsCoords)
+#plotScatterMatplot(newSommet,sommetsCoords)
