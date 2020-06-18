@@ -23,7 +23,7 @@ def init(sommets,faces):
         g = sommetsCLass[-1]
         c = np.concatenate((g.coords, np.array([1])),axis=0)
         #print(c)
-        print(c@g.Q@c.transpose())
+        #print(c@g.Q@c.transpose())
     
     #Selection des paires valides
     validPairsIndex = get_validPairs(sommets,faces)
@@ -48,7 +48,6 @@ validPairsIndex, sommets = init(sommets,faces)
 
 newSommet = []
 newKps = []
-"""  """
 for pair in validPairsIndex:
     #print('Pair : ',pair)
     Q = sommets[pair[0]].Q + sommets[pair[1]].Q 
@@ -91,4 +90,4 @@ newKps = np.array(newKps)
 #print(newSommet[np.argmin(newKps)])
 #print(len(newSommet))
 #plotScatterMatplot(np.array([newSommet[1]]),sommetsCoords)
-plotScatterMatplot(newSommet,sommetsCoords)
+#plotScatterMatplot(newSommet,sommetsCoords)

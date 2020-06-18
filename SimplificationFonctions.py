@@ -34,7 +34,11 @@ def planEquation(threePointsCoords):
     #print('{0} x + {1} y + {2} z + {3}'.format(a,b,c,d))
     p = np.array([[a],[b],[c],[d]])
     pt = np.array([[a,b,c,d]])
-    """print('Kp : \n',p*pt) """
+    #print('Kp : \n',p*pt)
+
+    print('plan : ',a*p3[0]+b*p3[1]+c*p3[2]+d)
+    print('plan : ',a*p2[0]+b*p2[1]+c*p2[2]+d)
+    print('plan : ',a*p1[0]+b*p1[1]+c*p1[2]+d)
     return p,pt
 
 def get_validPairs(sommets,faces):
@@ -84,7 +88,7 @@ def get_Q(Kps):
         for j in range(np.size(Kps[i],axis=0)):
             Q[i] += Kps[i][j]
     #Q = np.array(Q)
-    print('Q : \n', Q)
+    #print('Q : \n', Q)
     #print('________________________')
     return Q
 
