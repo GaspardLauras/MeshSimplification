@@ -37,8 +37,11 @@ def planEquation(threePointsCoords):
     trois points délimitant la surface et donc le plan.
     """
     p1,p2,p3 = threePointsCoords
-    v1 = (p2-p1)/(np.max(p2-p1))
-    v2 = (p3-p1)/(np.max(p3-p1)) 
+    print('P1 dans planEqution() : \n',p1)
+    print('P2 dans planEqution() : \n',p2)
+    print('P3 dans planEqution() : \n',p3)
+    v1 = (p2-p1)/np.abs(np.max(np.abs(p2)-np.abs(p1)))
+    v2 = (p3-p1)/np.abs(np.max(np.abs(p3)-np.abs(p1)))
     #print("v1,v2 : ",v1,v2)
     vn = np.cross(v1,v2)
     vn = vn/np.linalg.norm(vn)
@@ -123,8 +126,5 @@ def cost(v,Q):
     vt = np.transpose(v)
     return (vt@Q@v)[0][0]
 
-def doublonsSommet(sommets):
-    """
-    Retire les doublons dans la liste numpy Sommets
-    """
+def contraction():
     return
