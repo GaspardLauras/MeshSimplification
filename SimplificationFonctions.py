@@ -31,14 +31,14 @@ def planEquation(threePointsCoords):
     a,b,c = vn
     #print('a,b,c :',a,b,c)
     d = -(a*p3[0]+b*p3[1]+c*p3[2])
-    print('{0} x + {1} y + {2} z + {3}'.format(a,b,c,d))
+    #print('{0} x + {1} y + {2} z + {3}'.format(a,b,c,d))
     p = np.array([[a],[b],[c],[d]])
     pt = np.array([[a,b,c,d]])
     #print('Kp : \n',p*pt)
 
-    print('plan : ',a*p3[0]+b*p3[1]+c*p3[2]+d)
+    """ print('plan : ',a*p3[0]+b*p3[1]+c*p3[2]+d)
     print('plan : ',a*p2[0]+b*p2[1]+c*p2[2]+d)
-    print('plan : ',a*p1[0]+b*p1[1]+c*p1[2]+d)
+    print('plan : ',a*p1[0]+b*p1[1]+c*p1[2]+d) """
     return p,pt
 
 def get_validPairs(sommets,faces):
@@ -76,7 +76,6 @@ def get_Kps(sommets,points_in_surface):
         Kpi = []
         for surface in point:
             p,pt = planEquation(sommets[surface])
-            Kp = p@pt
             Kpi.append(p@pt)
         Kps.append(np.array(Kpi))
     Kps = np.array(Kps)
@@ -104,5 +103,9 @@ def get_deltaVs(sommets,Q):
     #print('________________________')
     return deltaVs
 
-def costNewPoints():
-    return
+
+
+def cost(v,Q):
+    vt = np.transpose(v)
+    return (vt@Q@v)[0][0]
+

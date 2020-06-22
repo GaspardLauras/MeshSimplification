@@ -23,7 +23,7 @@ def init(sommets,faces):
         g = sommetsCLass[-1]
         c = np.concatenate((g.coords, np.array([1])),axis=0)
         #print(c)
-        print('cost : ',c@g.Q@c.transpose())
+        #print('cost : ',c@g.Q@c.transpose())
     
     #Selection des paires valides
     validPairsIndex = get_validPairs(sommets,faces)
@@ -48,7 +48,7 @@ validPairsIndex, sommets = init(sommets,faces)
 
 newSommet = []
 newDv = []
-
+newDic = []
 for pair in validPairsIndex:
     #print('Pair : ',pair)
     Q = sommets[pair[0]].Q + sommets[pair[1]].Q 
@@ -58,19 +58,18 @@ for pair in validPairsIndex:
           [   0   ,   0   ,   0   ,   1   ]]
     Qp = np.array(Qp)
     #print('Qp : \n',Qp)
-    print('Det : \n',np.linalg.det(Qp))
+    #print('Det : \n',np.linalg.det(Qp))
     Qp = np.linalg.inv(Qp)
     #print('Qp^-1 : \n',Qp)
 
     #print('----')
     v = Qp.dot(np.array([[0],[0],[0],[1]]))
     newSommet.append(v[0:3])
-    vt = np.transpose(v)
     #print('new V : \n',v)
-    #print('new vt : \n',vt)
-    Dv = (vt@Q@v)[0][0]
-    print('Dv : \n',Dv)
+    Dv = cost(v,Q)
+    #print('Dv : \n',Dv)
     newDv.append(Dv)
+    newDic.append((Dv,v))
     #print('----------')
 
 """
@@ -86,9 +85,16 @@ A TROUVER : QUAND EST-CE QU'ON S'ARRETE?? --> il faut donner un nombre de faces 
 #print('--------------------------------')
 newSommet = np.array(newSommet)
 newDv = np.array(newDv)
-#print('New sommets : \n',newSommet)
-#print('New Kps : \n',newKps)
-print(newSommet[np.argmin(newDv)])
-#print(len(newSommet))
-plotScatterMatplot(np.array([newSommet[np.argmin(newKps)]]),sommetsCoords)
+print('minimal cost : ',np.min(newDv))
+newDic = sorted(newDic)
+newDic = np.array(newDic)
+print('New dic : \n',newDic)
+
+
+
+
+
+
+
+#plotScatterMatplot(np.array([newSommet[np.argmin(newDv)]]),sommetsCoords)
 #plotScatterMatplot(newSommet,sommetsCoords)
