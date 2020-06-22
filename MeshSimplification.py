@@ -29,3 +29,8 @@ for i in range(20):
 
 #plot2ScatterMatplot(sommetsCoords,newSommets)
 plotMesh(sommets,faces,'APRES')
+
+
+"""
+tests
+"""
