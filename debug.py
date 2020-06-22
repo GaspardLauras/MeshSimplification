@@ -1,15 +1,27 @@
-
+from SimplificationFonctions import *
 import numpy as np
 
 # E = (0.5,0.5,1.05)
 pA = np.array([1,1,1,1])
 
+points = np.array([
+	[0,0.1,1,-1.1],
+	[0.1,0,1,-1.1],
+	[0,1,0,-1],
+	[1,0,0,-1],
+	[0,-0.1,1,-1],
+	[-0.1,0,1,-1]
+	])
+
 A = [[[0,0.1,1,-1.1]],[[0.1,0,1,-1.1]],[[0,1,0,-1]],[[1,0,0,-1]]]
 
 E = [[[0,0.1,1,-1.1]],[[0.1,0,1,-1.1]],[[0,-0.1,1,-1]],[[-0.1,0,1,-1]]]
 
-A = [np.array(u) for u in A]
-E = [np.array(u) for u in E]
+A = np.array([np.array(u) for u in A])
+E = np.array([np.array(u) for u in E])
+
+print('A : \n',A)
+print('E : \n',E)
 
 KA = [p.transpose()@p for p in A]
 KE = [p.transpose()@p for p in E]

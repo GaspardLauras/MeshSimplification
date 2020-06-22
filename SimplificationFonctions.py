@@ -1,19 +1,33 @@
 import numpy as np
+from Sommet import Sommet
 import meshio
 
-def calculNormal(vectorList):
-    """ Calcul le plan moyen passant par un nuage de point"""
-    vectorList = np.array(vectorList)
-    covariance = np.cov(vectorList.transpose()) # calcul de la matrice de covariance
-    u = np.linalg.svd(covariance)[0] # calcul des vecteurs propres ordonnées par valeur propre décroissante
-    vecNormal = u[:,-1] # vecteur propre associé à la valeur propre représentant la distance des points au plan la plus faible
-    vecNormalNorme = vecNormal / np.linalg.norm(vecNormal) # calcul du vecteur normal normée
-    barycentre = np.average(vectorList, axis=0) # calcul du barycentre dans le repère orthogonal d'origine
-    d = - np.vdot(vecNormalNorme, barycentre) # calcul de la distance du barycentre au plan
-    a, b, c = vecNormalNorme # extraction des coordonnées du vecteur directeur
-    #print(vecNormalNorme)
-    vn = [a, b, c]
-    return vn
+
+def init(sommets,faces):
+    #Calcul de Q pour tous les sommets initiaux
+    points_in_surface = get_Points_in_surface(sommets,faces)
+    Kps = get_Kps(sommets,points_in_surface)
+    #print('Kps : \n',Kps)
+    #Q = get_Q(Kps)
+    #deltaVs = get_deltaVs(sommets,Q)
+    #print(Q)
+    sommetsCLass = []
+    for i in range(len(sommets)):
+        sommetsCLass.append(Sommet(sommets[i]))
+        sommetsCLass[-1].set_Kp(Kps[i])
+        sommetsCLass[-1].set_Q()
+        sommetsCLass[-1].set_surfaces(points_in_surface[i])
+        g = sommetsCLass[-1]
+        c = np.concatenate((g.coords, np.array([1])),axis=0)
+        #print(c)
+        #print('cost : ',c@g.Q@c.transpose())
+    
+    #Selection des paires valides
+    validPairsIndex = get_validPairs(sommets,faces)
+
+    return validPairsIndex,sommetsCLass
+
+
 
 def planEquation(threePointsCoords):
     """
@@ -34,7 +48,7 @@ def planEquation(threePointsCoords):
     #print('{0} x + {1} y + {2} z + {3}'.format(a,b,c,d))
     p = np.array([[a],[b],[c],[d]])
     pt = np.array([[a,b,c,d]])
-    #print('Kp : \n',p*pt)
+    #print('P : ',p)
 
     """ print('plan : ',a*p3[0]+b*p3[1]+c*p3[2]+d)
     print('plan : ',a*p2[0]+b*p2[1]+c*p2[2]+d)
@@ -109,3 +123,8 @@ def cost(v,Q):
     vt = np.transpose(v)
     return (vt@Q@v)[0][0]
 
+def doublonsSommet(sommets):
+    """
+    Retire les doublons dans la liste numpy Sommets
+    """
+    return

@@ -22,3 +22,5 @@ print('Kp fait à la mano : \n',Kp)
 
 Kps= get_Kps(points,surfaces)
 print('Kps : \n',Kps)
+
+

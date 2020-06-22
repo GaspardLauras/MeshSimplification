@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 
-def plotScatterMatplot(sommets1, sommets2):
+def plot2ScatterMatplot(sommets1, sommets2):
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     ax.scatter(xs=sommets1[:,0],
@@ -14,7 +14,16 @@ def plotScatterMatplot(sommets1, sommets2):
     ax.scatter(xs=sommets2[:,0],
     ys=sommets2[:,1], 
     zs=sommets2[:,2], 
-    c='b',marker='*') 
+    c='b',marker='o')
+    plt.show()
+
+def plotScatterMatplot(sommets1):
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    ax.scatter(xs=sommets1[:,0],
+    ys=sommets1[:,1], 
+    zs=sommets1[:,2], 
+    c='r',marker='o') 
     plt.show()
 
 def plotScatter(sommets,offName):
