@@ -23,15 +23,15 @@ def planEquation(threePointsCoords):
     trois points délimitant la surface et donc le plan.
     """
     p1,p2,p3 = threePointsCoords
-    v1 = p2-p1
-    v2 = p3-p1 
+    v1 = (p2-p1)/(np.max(p2-p1))
+    v2 = (p3-p1)/(np.max(p3-p1)) 
     #print("v1,v2 : ",v1,v2)
-    vn = calculNormal([v1,v2])
-    #print('vn : ',vn)
+    vn = np.cross(v1,v2)
+    vn = vn/np.linalg.norm(vn)
     a,b,c = vn
     #print('a,b,c :',a,b,c)
     d = -(a*p3[0]+b*p3[1]+c*p3[2])
-    #print('{0} x + {1} y + {2} z + {3}'.format(a,b,c,d))
+    print('{0} x + {1} y + {2} z + {3}'.format(a,b,c,d))
     p = np.array([[a],[b],[c],[d]])
     pt = np.array([[a,b,c,d]])
     #print('Kp : \n',p*pt)
@@ -82,6 +82,8 @@ def get_Kps(sommets,points_in_surface):
     Kps = np.array(Kps)
     return Kps
 
+
+
 def get_Q(Kps):
     Q = np.zeros((np.shape(Kps)[0],4,4))
     for i in range(np.shape(Q)[0]):
@@ -96,9 +98,11 @@ def get_deltaVs(sommets,Q):
     deltaVs = []
     for i in range(len(sommets)):
         v = np.concatenate((sommets[i],np.array([1])), axis=0)
-        deltaVs.append(v[np.newaxis].T*Q[i]*v)
+        deltaVs.append(v[np.newaxis].T@Q[i]@v)
     deltaVs = np.array(deltaVs)
     #print('Deltas V : \n',deltaVs)
     #print('________________________')
     return deltaVs
 
+def costNewPoints():
+    return

@@ -23,7 +23,7 @@ def init(sommets,faces):
         g = sommetsCLass[-1]
         c = np.concatenate((g.coords, np.array([1])),axis=0)
         #print(c)
-        #print(c@g.Q@c.transpose())
+        print('cost : ',c@g.Q@c.transpose())
     
     #Selection des paires valides
     validPairsIndex = get_validPairs(sommets,faces)
@@ -47,7 +47,8 @@ validPairsIndex, sommets = init(sommets,faces)
 #print('---------------------------------')
 
 newSommet = []
-newKps = []
+newDv = []
+
 for pair in validPairsIndex:
     #print('Pair : ',pair)
     Q = sommets[pair[0]].Q + sommets[pair[1]].Q 
@@ -57,7 +58,7 @@ for pair in validPairsIndex:
           [   0   ,   0   ,   0   ,   1   ]]
     Qp = np.array(Qp)
     #print('Qp : \n',Qp)
-    #print('Det : \n',np.linalg.det(Qp))
+    print('Det : \n',np.linalg.det(Qp))
     Qp = np.linalg.inv(Qp)
     #print('Qp^-1 : \n',Qp)
 
@@ -68,8 +69,8 @@ for pair in validPairsIndex:
     #print('new V : \n',v)
     #print('new vt : \n',vt)
     Dv = (vt@Q@v)[0][0]
-    #print('Dv : \n',Dv)
-    newKps.append(Dv)
+    print('Dv : \n',Dv)
+    newDv.append(Dv)
     #print('----------')
 
 """
@@ -78,16 +79,16 @@ Calculer le cout de chaque point candidat D(v) = vT*Q*v
 On prend celle qui a le cout le plus faible
 Refaire la meme chose avec le nouveau mesh
 
-A TROUVER : QUAND EST-CE QU'ON S'ARRETE??
+A TROUVER : QUAND EST-CE QU'ON S'ARRETE?? --> il faut donner un nombre de faces à obtenir à l'avance
 """
 
 
 #print('--------------------------------')
 newSommet = np.array(newSommet)
-newKps = np.array(newKps)
+newDv = np.array(newDv)
 #print('New sommets : \n',newSommet)
 #print('New Kps : \n',newKps)
-#print(newSommet[np.argmin(newKps)])
+print(newSommet[np.argmin(newDv)])
 #print(len(newSommet))
-#plotScatterMatplot(np.array([newSommet[1]]),sommetsCoords)
+plotScatterMatplot(np.array([newSommet[np.argmin(newKps)]]),sommetsCoords)
 #plotScatterMatplot(newSommet,sommetsCoords)

@@ -8,13 +8,13 @@ from Sommet import Sommet
 
 points = np.array(
     [
-        [1,3,1],
-        [3,2,2],
-        [2,1,3]])
+        [0,0,0],
+        [1,1,0],
+        [1,0,0]])
 face = np.array([[0,1,2]])
 surfaces = get_Points_in_surface(points,face)
 
-#plotMesh(points,face,'tg')
+plotMesh(points,face,'tg')
 
 p,pt = planEquation(points)
 Kp = p@pt
