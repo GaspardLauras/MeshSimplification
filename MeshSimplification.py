@@ -8,29 +8,31 @@ from Sommet import Sommet
 import copy
 
 
-offName = "OFF/test.off"
+offName = "OFF/twisted.off"
 
 #########################################
 #       Extraction des données:         #
 #########################################
 mesh = meshio.read(filename=offName,file_format="off")
 sommets = mesh.points
+sommetsInit = copy.deepcopy(sommets)
 faces = mesh.cells[0].data
-#plotMesh(sommets,faces,'AVANT')
+plotMesh(sommetsInit,faces,'AVANT')
 
-
+""" 
+print('Sommets initiaux : \n',sommets)
+print('Faces initiales : \n',faces)
+print('------------------Début des itérations----------------------') """
 
 
 ################################
-for i in range(20):
+for i in range(100):
     sommets, faces = contraction(sommets, faces)
+    """ print('Sommets ',i,' : \n',sommets)
+    print('Faces ',i,' : \n',faces)
+    print('----------------FIN DE L"ITERATION #',i,'----------------------') """
 ################
 
 
-#plot2ScatterMatplot(sommetsCoords,newSommets)
+plot2ScatterMatplot(sommetsInit,sommets)
 plotMesh(sommets,faces,'APRES')
-
-
-"""
-tests
-"""

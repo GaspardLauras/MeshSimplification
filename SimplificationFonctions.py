@@ -121,6 +121,7 @@ def init(sommets,faces):
     return validPairsIndex,sommetsCLass
 
 def cost(v,Q):
+    #print('v in cost : \n',v)
     vt = np.transpose(v)
     return (vt@Q@v)[0][0]
 
@@ -128,7 +129,7 @@ def contraction(sommets, faces):
     #prend la liste des sommets et la liste des faces en entrée
     sommetsCoords = sommets
     validPairsIndex, sommets = init(sommets ,faces)
-    print('SommetsCoords : \n',sommetsCoords)
+    #print('SommetsCoords : \n',sommetsCoords)
     #print('Valid pairs : \n',validPairsIndex)
     """
     A TROUVER : QUAND EST-CE QU'ON S'ARRETE?? --> il faut donner un nombre de faces à obtenir à l'avance
@@ -138,45 +139,48 @@ def contraction(sommets, faces):
     newDv = []
     newDic = []
     for pair in validPairsIndex:
-        print('-------------')
+        """ print('-------------')
         print('Pair : ',pair)
         print('Pair coords : \n',sommets[pair[0]].coords ,'\n--\n', sommets[pair[1]].coords)
-        print('Pair Qs : \n',sommets[pair[0]].Q ,'\n--\n', sommets[pair[1]].Q)
+        print('Pair Qs : \n',sommets[pair[0]].Q ,'\n--\n', sommets[pair[1]].Q) """
         Q = sommets[pair[0]].Q + sommets[pair[1]].Q 
-        print('Q : \n',Q)
+        #print('Q : \n',Q)
         Qp = [[Q[0][0],Q[0][1],Q[0][2],Q[0][3]],
             [Q[0][1],Q[1][1],Q[1][2],Q[1][3]],
             [Q[0][2],Q[1][2],Q[2][2],Q[2][3]],
             [0      ,0      ,0      ,1      ]]
         Qp = np.array(Qp)
-        print('Qp : \n',Qp)
-        print('Det : \n',np.linalg.det(Qp))
+        #print('Qp : \n',Qp)
+        #print('Det : \n',np.linalg.det(Qp))
 
         if np.linalg.det(Qp) > 10**(-4):
             Qp = np.linalg.inv(Qp)
             v = Qp.dot(np.array([[0],[0],[0],[1]]))
+            #print('det > 10^-4')
         else:
+            #print('det <10^-4')
             v= (sommets[pair[0]].coords + sommets[pair[1]].coords)/2
+            #print('v in else : \n',type(v[0:3]))
+            v= np.transpose(np.concatenate((v,np.array([1.0])), axis=0))
+            v = v.reshape((4,1))
         
         contractedSommets.append(v[0:3])
+        
         #print('new V : \n',v)
         Dv = cost(v,Q)
         #print('Dv : \n',Dv)
         newDv.append(Dv)
         newDic.append((Dv,v,pair))
-        #print('----------')
+        print('----------')
 
-
-
-
-    print('--------------------------------')
+    #print('--------------------------------')
     contractedSommets = np.array(contractedSommets)
     newDv = np.array(newDv)
-    print('NewDic : ')
-    for dic in newDic:
+    #print('NewDic : ')
+    """ for dic in newDic:
         for truc in dic:
             print(truc)
-        print('---')
+        print('---') """
 
     newDic = sorted(newDic, key=lambda x: x[0]) #Trie selon le premier élément du tuple, ici le coût
     #print('New dic : \n',newDic)
@@ -186,15 +190,16 @@ def contraction(sommets, faces):
 
     newSommets = copy.deepcopy(sommetsCoords)
 
-    print('sommets not updated : \n',newSommets)
+    #print('sommets not updated : \n',newSommets)
     newSommets[minPair[0]] = np.transpose(minV[0:3])
     newSommets[minPair[1]] = np.transpose(minV[0:3])
     #_,idx = np.unique(newSommets, axis=0, return_index=True)
     #idx = np.sort(idx)
     #newSommets = newSommets[idx]
-    print('sommets updated without doublons : \n',newSommets)
+    
+    #print('sommets updated without doublons : \n',newSommets)
     #print('Faces : \n',faces)
 
-    print('----------------FIN DE L"ITERATION----------------------')
-    plotScatterMatplot(newSommets)
+    
+    #plotScatterMatplot(newSommets)
     return newSommets,faces
