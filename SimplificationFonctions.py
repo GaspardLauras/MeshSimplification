@@ -193,13 +193,29 @@ def contraction(sommets, faces):
     #print('sommets not updated : \n',newSommets)
     newSommets[minPair[0]] = np.transpose(minV[0:3])
     newSommets[minPair[1]] = np.transpose(minV[0:3])
-    #_,idx = np.unique(newSommets, axis=0, return_index=True)
-    #idx = np.sort(idx)
-    #newSommets = newSommets[idx]
-    
-    #print('sommets updated without doublons : \n',newSommets)
+
+    _,idx = np.unique(newSommets, axis=0, return_index=True)
+    idx = np.sort(idx)
+    newSommets = newSommets[idx]
+    faces = gestionFaces(faces, minPair)
+    print('sommets updated without doublons : \n',newSommets)
     #print('Faces : \n',faces)
 
     
     #plotScatterMatplot(newSommets)
     return newSommets,faces
+
+def gestionFaces(faces, paire):
+    v1,v2 = sorted(paire)
+    print(v1,v2)
+    print('faces inital : \n',faces)
+    faces = np.where(faces==v2, v1, faces)
+    print('faces après suppression du point contracté : \n',faces)
+
+    faces = np.where(faces>v1, faces-1, faces)
+    print('faces après decrémentation : \n',faces)
+
+    faces = np.array([face for face in faces if len(np.unique(face)) == len(face)])
+    print('faces après gestion des doublons : \n',faces)
+
+    return faces

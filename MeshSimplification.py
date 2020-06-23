@@ -8,7 +8,7 @@ from Sommet import Sommet
 import copy
 
 
-offName = "OFF/twisted.off"
+offName = "OFF/sphere.off"
 
 #########################################
 #       Extraction des données:         #
@@ -26,13 +26,14 @@ print('------------------Début des itérations----------------------') """
 
 
 ################################
-for i in range(100):
+for i in range(20):
     sommets, faces = contraction(sommets, faces)
     """ print('Sommets ',i,' : \n',sommets)
     print('Faces ',i,' : \n',faces)
     print('----------------FIN DE L"ITERATION #',i,'----------------------') """
+    
 ################
 
 
-plot2ScatterMatplot(sommetsInit,sommets)
+#plot2ScatterMatplot(sommetsInit,sommets)
 plotMesh(sommets,faces,'APRES')
