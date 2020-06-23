@@ -171,7 +171,7 @@ def contraction(sommets, faces):
         #print('Dv : \n',Dv)
         newDv.append(Dv)
         newDic.append((Dv,v,pair))
-        print('----------')
+        #print('----------')
 
     #print('--------------------------------')
     contractedSommets = np.array(contractedSommets)
@@ -198,7 +198,8 @@ def contraction(sommets, faces):
     idx = np.sort(idx)
     newSommets = newSommets[idx]
     faces = gestionFaces(faces, minPair)
-    print('sommets updated without doublons : \n',newSommets)
+
+    #print('sommets updated without doublons : \n',newSommets)
     #print('Faces : \n',faces)
 
     
@@ -207,15 +208,16 @@ def contraction(sommets, faces):
 
 def gestionFaces(faces, paire):
     v1,v2 = sorted(paire)
-    print(v1,v2)
-    print('faces inital : \n',faces)
-    faces = np.where(faces==v2, v1, faces)
-    print('faces après suppression du point contracté : \n',faces)
+    #print(v1,v2)
 
-    faces = np.where(faces>v1, faces-1, faces)
-    print('faces après decrémentation : \n',faces)
+    #print('faces inital : \n',faces)
+    faces = np.where(faces==v2, v1, faces)
+    #print('faces après suppression du point contracté : \n',faces)
+
+    faces = np.where(faces>=v2, faces-1, faces)
+    #print('faces après decrémentation : \n',faces)
 
     faces = np.array([face for face in faces if len(np.unique(face)) == len(face)])
-    print('faces après gestion des doublons : \n',faces)
+    #print('faces après gestion des doublons : \n',faces)
 
     return faces
