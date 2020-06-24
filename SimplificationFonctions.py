@@ -2,7 +2,6 @@ import numpy as np
 from Sommet import Sommet
 import meshio
 import copy
-from MeshPlot import *
 
 
 def planEquation(threePointsCoords):
