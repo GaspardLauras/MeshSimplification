@@ -60,8 +60,6 @@ def lines(points, aretes):
     glEnd()
 
 def plot(sommets, aretes):
-
-
     pg.init()
     display = (1680, 1050)
     pg.display.set_mode(display, DOUBLEBUF|OPENGL)
