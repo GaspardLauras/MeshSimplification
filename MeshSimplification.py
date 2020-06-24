@@ -8,39 +8,35 @@ from Sommet import Sommet
 import copy
 
 
-offName = "sphere.off"
+
+
+
+
+offName = "sphere"
+
+
+
 
 #########################################
 #       Extraction des données:         #
 #########################################
-mesh = meshio.read(filename="OFF/"+offName,file_format="off")
+mesh = meshio.read(filename="OFF/"+offName+".off",file_format="off")
 sommets = mesh.points
 sommetsInit = copy.deepcopy(sommets)
+
 faces = mesh.cells[0].data
-plotMesh(sommetsInit,faces,'AVANT')
-n_faces = len(faces)
-print(n_faces)
+facesInit = copy.deepcopy(faces)
 
-""" 
-print('Sommets initiaux : \n',sommets)
-print('Faces initiales : \n',faces)
-print('------------------Début des itérations----------------------') """
+while len(faces)>50:
+    sommets, faces, aretes = contraction(sommets, faces)
 
-i=0
-################################
-while len(faces)>2:
-    i+=1
-    sommets, faces = contraction(sommets, faces)
-    print('Itération ',i,'\n    ',len(faces))
-    
-################
-
-print(len(faces))
-#plot2ScatterMatplot(sommetsInit,sommets)
-plotMesh(sommets,faces,'APRES')
-
-print(sommets)
+#########################################
+#        Ecriture des données:          #
+#########################################
 cells=[('triangle',faces)]
-
 result = meshio.Mesh(sommets,cells)
-meshio.write("OFF_results/result_"+offName,result)
+meshio.write("OFF_results/result_"+offName+".obj",result)
+
+
+
+plot(sommets, aretes)

@@ -2,54 +2,15 @@ import plotly.graph_objects as go
 import plotly.express as px
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+from plotly.subplots import make_subplots
 import numpy as np
 
-def plot2ScatterMatplot(sommets1, sommets2):
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
-    ax.scatter(xs=sommets1[:,0],
-    ys=sommets1[:,1], 
-    zs=sommets1[:,2], 
-    c='r',marker='o') 
-    ax.scatter(xs=sommets2[:,0],
-    ys=sommets2[:,1], 
-    zs=sommets2[:,2], 
-    c='b',marker='o')
-    plt.show()
-
-def plotScatterMatplot(sommets1):
-    fig = plt.figure()
-    ax = fig.add_subplot(111, projection='3d')
-    ax.scatter(xs=sommets1[:,0],
-    ys=sommets1[:,1], 
-    zs=sommets1[:,2], 
-    c='r',marker='o') 
-    plt.show()
-
-def plotScatter(sommets,offName):
-    fig = go.Figure(data=[go.Scatter3d(
-    x=sommets[:,0], 
-    y=sommets[:,1], 
-    z=sommets[:,2],
-    mode='markers',
-    marker=dict(
-        size=12,
-        color=sommets[:,2],                # set color to an array/list of desired values
-        opacity=0.8
-    )
-    )])
-    fig.show()
+import pygame as pg
+from pygame.locals import *
+from OpenGL.GL import *
+from OpenGL.GLU import *
 
 def plotMesh(sommets,faces,offName):
-    """
-    Fonction qui permet d'afficher à partir de la matrice des points 
-    et des surfaces extraite avec openOFF.py/extractDataFromOFF()
-    le Mesh correspondant en utilisant la bibliothèque Plotly.
-    """
-    #print('Sommets',sommets)
-    #print('Faces',faces)
-
-    #Plotly
     fig = go.Figure(data=[
         go.Mesh3d(
             #sommets
@@ -59,8 +20,10 @@ def plotMesh(sommets,faces,offName):
             #Faces
             i=faces[:,0],
             j=faces[:,1],
-            k=faces[:,2]
+            k=faces[:,2],
             #couleur
+            color='cyan',
+            opacity=0.50
         )]
     )
 
@@ -85,3 +48,37 @@ def plotMesh(sommets,faces,offName):
         title=offName  
     )
     fig.show()
+
+
+
+    
+def lines(points, aretes):
+    glBegin(GL_LINES)
+    for arete in aretes:
+        for p in arete:
+            glVertex3fv(points[p])
+    glEnd()
+
+def plot(sommets, aretes):
+
+
+    pg.init()
+    display = (1680, 1050)
+    pg.display.set_mode(display, DOUBLEBUF|OPENGL)
+
+    gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
+
+    glTranslatef(0.0, 0.0, -5)
+
+    while True:
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                pg.quit()
+                quit()
+
+        glRotatef(1, 1, 1, 1)
+        glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
+        lines(sommets, aretes)
+        pg.display.flip()
+        pg.time.wait(10)
+
