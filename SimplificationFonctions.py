@@ -5,13 +5,25 @@ import copy
 
 
 def planEquation(threePointsCoords):
+    #Fonction renvoyant les équations d'un plan à partir des coordonnées
+    #de trois points 
+    #Renvois p = [[a],[b],[c],[d]] et pt = [[a,b,c,d]]
+    
     p1,p2,p3 = threePointsCoords
+
+    #Calcul des vecteurs v1 = p1p2 et v2 = p1p3
     v1 = (p2-p1)#/np.abs(np.max(np.abs(p2)-np.abs(p1)))
     v2 = (p3-p1)#/np.abs(np.max(np.abs(p3)-np.abs(p1)))
+    
+    #Calcul de vn = abc avec np.cross 
     vn = np.cross(v1,v2)
     vn = vn/np.linalg.norm(vn)
     a,b,c = vn
+
+    #Calcul de d
+    #ax+by+cz+d = 0 => d = -(ax+by+cz)
     d = -(a*p3[0]+b*p3[1]+c*p3[2])
+
     p = np.array([[a],[b],[c],[d]])
     pt = np.array([[a,b,c,d]])
 
@@ -25,27 +37,49 @@ def planEquation(threePointsCoords):
 
 
 def get_validPairs(sommets,faces):
+    # Fonction renvoyant les indexs des points formant des
+    # paires valides à partir d'une liste de points
+    # et d'une liste de faces.
+    # Cette liste correspond aux arêtes du mesh 
+    
+    #Liste des paires valides que l'on va remplir et renvoyer
     validPairsIndex = []
-    for i in faces:
+
+    for i in faces: #i correspond à chaque face de la liste faces i=[a b c]
+        # On vérifie si [ab] ou [ba] dans la liste des paires valides
         if not ( ([i[0],i[1]] in validPairsIndex) or ([i[1],i[0]] in validPairsIndex) ) :
             validPairsIndex.append([i[0],i[1]])
-
+        
+        # On vérifie si [ac] ou [ca] dans la liste des paires valides
         if not ( ([i[0],i[2]] in validPairsIndex) or ([i[2],i[0]] in validPairsIndex) ) :
             validPairsIndex.append([i[0],i[2]])
 
+        # On vérifie si [cb] ou [bc] dans la liste des paires valides
         if not ( ([i[1],i[2]] in validPairsIndex) or ([i[2],i[1]] in validPairsIndex) ) :
             validPairsIndex.append([i[1],i[2]])
-
+    # end for i in faces 
     validPairsIndex = np.array(validPairsIndex)
     return validPairsIndex
+    
 
 
 
 def get_Points_in_surface(sommets,faces):
+    # Fonction renvoyant la liste des surfaces passant par chaque point
+    # liste correspondant aux surfaces passant par le point d'indice i:
+    # de la forme :
+    # [ 'pt0 ' : [0 1 2],[0 2 3],[1 3 4]...
+    #   'ptn'  : [...]
+    # ] 
     points_in_surface = [[] for i in range(len(sommets))]
-    for f in faces:
-        for i in f:
+
+    for f in faces: # f = chaque élément de faces (donc chaque face)
+        for i in f: # i = chaque indice de sommets dans la face f
+            # on ajout à l'emplacement i (correspondant au point #i de sommet) dans points in surface
+            # la face f car i est dans f
             points_in_surface[i].append(f)
+        # end for i in f:
+    # end for f in faces:
     points_in_surface = np.array(points_in_surface)
     return points_in_surface
 

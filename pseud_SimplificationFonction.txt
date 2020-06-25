@@ -1,0 +1,43 @@
+FONCTION getValidPairs(np.array() sommets, faces)
+	validPairsIndex <- []
+
+	POUR i APPARTIENT A faces
+
+		SI NON( [i[0] i[1]] APPARTIENT A validPairsIndex  OU  [i[1] i[0]] APPARTIENT A validPairsIndex  ALORS 
+			AJOUTER [i[0] i[1]] DANS ValidPairsIndex
+		FIN SI
+
+		SI NON( [i[0] i[2]] APPARTIENT A validPairsIndex  OU  [i[2] i[0]] APPARTIENT A validPairsIndex  ALORS 
+			AJOUTER [i[0] i[2]] DANS ValidPairsIndex
+		FIN SI
+
+
+		SI NON( [i[2] i[1]] APPARTIENT A validPairsIndex  OU  [i[1] i[2]] APPARTIENT A validPairsIndex  ALORS 
+			AJOUTER [i[2] i[1]] DANS ValidPairsIndex
+		FIN SI
+	
+	FIN POUR
+
+	RETOURNER validPairsIndex SOUS FORME np.array()
+END getValidPairs()
+
+
+
+FONCTION get_Points_in_surfaces(np.array() sommets, faces)
+	points_in_surface <- [[] POUR i ALLANT DE 0 A taille(sommets)]
+
+	POUR f DANS faces
+		POUR i DANS f
+			AJOUTER f A points_in_surface[i]
+		FIN POUR
+	FIN POUR
+
+	RETOURNER points_in_surface OUS FORME np.array()
+FIN  get_Points_in_surface
+
+
+
+FONCTION get_Kps(np.array() sommets, point_in_surface)
+	Kps <- []
+	
+FIN get_Kps()
