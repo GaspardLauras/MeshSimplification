@@ -39,5 +39,6 @@ FIN  get_Points_in_surface
 
 FONCTION get_Kps(np.array() sommets, point_in_surface)
 	Kps <- []
+	POUR i ALLANT DE 0 A 
 	
 FIN get_Kps()

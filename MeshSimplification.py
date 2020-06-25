@@ -53,7 +53,7 @@ aretesInit = copy.deepcopy(aretes)
 
 #Init de la fenêtre pygame
 pygame.init()
-display = (2000,1000)
+display = (1500,1000)
 pygame.display.set_mode(display, pygame.DOUBLEBUF|pygame.OPENGL)
 glEnable(GL_DEPTH_TEST)
 
@@ -70,14 +70,18 @@ while len(faces)>nfaces or pygame.get_init():
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
     
     #plot_faces(sommets, faces)
-    plot_lines(sommets, aretes)
-    pygame.display.flip()
-    pygame.time.wait(10)
 
     #Tant que l'on a pas atteint les n faces voulues
     #On simplifie
     if len(faces)>nfaces:
         sommets, faces, aretes = contraction(sommets, faces)
+        plot_lines(sommets, aretes)
+    else:
+        plot_faces(sommets, faces)
+        plot_lines(sommets, aretes)
+    
+    pygame.display.flip()
+    pygame.time.wait(10)
 
 #Ecriture du résultat dans un fichier
 cells=[('triangle',faces)]

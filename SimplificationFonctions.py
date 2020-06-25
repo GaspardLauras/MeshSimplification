@@ -12,8 +12,9 @@ def planEquation(threePointsCoords):
     p1,p2,p3 = threePointsCoords
 
     #Calcul des vecteurs v1 = p1p2 et v2 = p1p3
-    v1 = (p2-p1)#/np.abs(np.max(np.abs(p2)-np.abs(p1)))
-    v2 = (p3-p1)#/np.abs(np.max(np.abs(p3)-np.abs(p1)))
+    # Calculer d'abord le np.max p1 p2 p3
+    v1 = (p2-p1)/np.max(np.abs(p2-p1))
+    v2 = (p3-p1)/np.max(np.abs(p3-p1))
     
     #Calcul de vn = abc avec np.cross 
     vn = np.cross(v1,v2)
@@ -191,8 +192,17 @@ def contraction(sommets, faces):
     _,idx = np.unique(newSommets, axis=0, return_index=True)
     idx = np.sort(idx)
     newSommets = newSommets[idx]
+    
     faces = gestionFaces(faces, minPair)
 
+    # Remplacer et non recaclculer
     validPairsIndex = get_validPairs(newSommets,faces)
 
     return newSommets,faces,validPairsIndex
+
+
+#Ne recalculer que les Q pour les nouveaux points
+
+#Faire deux version 
+
+# Meshs à partir de photos
