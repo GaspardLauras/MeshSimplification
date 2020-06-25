@@ -122,11 +122,12 @@ def get_deltaVs(sommets,Q):
 def init(sommets,faces):
     points_in_surface = get_Points_in_surface(sommets,faces)
     Kps = get_Kps(sommets,points_in_surface)
+    Q = get_Q(Kps)
     sommetsCLass = []
     for i in range(len(sommets)):
         sommetsCLass.append(Sommet(sommets[i]))
         sommetsCLass[-1].set_Kp(Kps[i])
-        sommetsCLass[-1].set_Q()
+        sommetsCLass[-1].set_Q(Q[i])
         sommetsCLass[-1].set_surfaces(points_in_surface[i])
         g = sommetsCLass[-1]
         c = np.concatenate((g.coords, np.array([1])),axis=0)
@@ -148,7 +149,6 @@ def gestionFaces(faces, paire):
     faces = np.where(faces>=v2, faces-1, faces)
     faces = np.array([face for face in faces if len(np.unique(face)) == len(face)])
     return faces
-
 
 
 def contraction(sommets, faces): 
@@ -184,8 +184,11 @@ def contraction(sommets, faces):
         newDic.append((Dv,v,pair))
     contractedSommets = np.array(contractedSommets)
     newDv = np.array(newDv)
-    newDic = sorted(newDic, key=lambda x: x[0]) 
+    newDic = sorted(newDic, key=lambda x: x[0])
+
     minCost, minV, minPair = newDic[0]
+    
+    # Gestion des sommets
     newSommets = copy.deepcopy(sommetsCoords)
     newSommets[minPair[0]] = np.transpose(minV[0:3])
     newSommets[minPair[1]] = np.transpose(minV[0:3])
