@@ -1,5 +1,4 @@
 import numpy as np
-from Sommet import Sommet
 import meshio
 import copy
 
@@ -120,20 +119,13 @@ def get_deltaVs(sommets,Q):
 
 
 def init(sommets,faces):
+    print('IN init')
     points_in_surface = get_Points_in_surface(sommets,faces)
     Kps = get_Kps(sommets,points_in_surface)
     Q = get_Q(Kps)
-    sommetsCLass = []
-    for i in range(len(sommets)):
-        sommetsCLass.append(Sommet(sommets[i]))
-        sommetsCLass[-1].set_Kp(Kps[i])
-        sommetsCLass[-1].set_Q(Q[i])
-        sommetsCLass[-1].set_surfaces(points_in_surface[i])
-        g = sommetsCLass[-1]
-        c = np.concatenate((g.coords, np.array([1])),axis=0)
-    validPairsIndex = get_validPairs(sommets,faces)
-
-    return validPairsIndex,sommetsCLass
+    validPairsIndex = get_validPairs(sommets, faces)
+    print('OUT init')
+    return  Q,validPairsIndex
 
 
 
@@ -144,28 +136,33 @@ def cost(v,Q):
 
 
 def gestionFaces(faces, paire):
-    v1,v2 = sorted(paire)
+    v1,v2 = paire
     faces = np.where(faces==v2, v1, faces)
     faces = np.where(faces>=v2, faces-1, faces)
     faces = np.array([face for face in faces if len(np.unique(face)) == len(face)])
     return faces
 
 
-def contraction(sommets, faces): 
-    sommetsCoords = sommets
-    validPairsIndex, sommets = init(sommets ,faces)
+def gestionValidPairs(paires, paire):
+    v1,v2 = paire
+    paires = np.where(paires==v2, v1, paires)
+    paires = np.where(paires>=v2, paires-1, paires)
+    paires = np.array([paire for paire in paires if len(np.unique(paire))==len(paire)])
+    return paires
+
+
+
+def contraction(sommetsCoords, faces, Q_array,validPairsIndex): 
+    sommetsCoords 
+
     contractedSommets = []
     newDv = []
     newDic = []
+
+    ##################################
     for pair in validPairsIndex:
-        """ 
-        print('-------------')
-        print('Pair : ',pair)
-        print('Pair coords : \n',sommets[pair[0]].coords ,'\n--\n', sommets[pair[1]].coords)
-        print('Pair Qs : \n',sommets[pair[0]].Q ,'\n--\n', sommets[pair[1]].Q) 
-        """
-        Q = sommets[pair[0]].Q + sommets[pair[1]].Q 
-        Qp = [[Q[0][0],Q[0][1],Q[0][2],Q[0][3]],
+        Q = Q_array[pair[0]] + Q_array[pair[1]] 
+        Qp= [[Q[0][0],Q[0][1],Q[0][2],Q[0][3]],
             [Q[0][1],Q[1][1],Q[1][2],Q[1][3]],
             [Q[0][2],Q[1][2],Q[2][2],Q[2][3]],
             [0      ,0      ,0      ,1      ]]
@@ -175,33 +172,44 @@ def contraction(sommets, faces):
             Qp = np.linalg.inv(Qp)
             v = Qp.dot(np.array([[0],[0],[0],[1]]))
         else:
-            v= (sommets[pair[0]].coords + sommets[pair[1]].coords)/2
+            v= (sommetsCoords[pair[0]] + sommetsCoords[pair[1]])/2
             v= np.transpose(np.concatenate((v,np.array([1.0])), axis=0))
             v = v.reshape((4,1))
         contractedSommets.append(v[0:3])
         Dv = cost(v,Q)
         newDv.append(Dv)
-        newDic.append((Dv,v,pair))
+        newDic.append((Dv,v,Q,pair))
+    ##################################
+
     contractedSommets = np.array(contractedSommets)
     newDv = np.array(newDv)
     newDic = sorted(newDic, key=lambda x: x[0])
 
-    minCost, minV, minPair = newDic[0]
+    minCost, minV, minQ,  minPair = newDic[0]
     
+    minPair = sorted(minPair)
+
     # Gestion des sommets
-    newSommets = copy.deepcopy(sommetsCoords)
-    newSommets[minPair[0]] = np.transpose(minV[0:3])
-    newSommets[minPair[1]] = np.transpose(minV[0:3])
-    _,idx = np.unique(newSommets, axis=0, return_index=True)
+    sommetsCoords[minPair[0]] = np.transpose(minV[0:3])
+    sommetsCoords[minPair[1]] = np.transpose(minV[0:3])
+    _,idx = np.unique(sommetsCoords, axis=0, return_index=True)
     idx = np.sort(idx)
-    newSommets = newSommets[idx]
+    sommetsCoords = sommetsCoords[idx]
     
+    # Gestion Faces
     faces = gestionFaces(faces, minPair)
 
-    # Remplacer et non recaclculer
-    validPairsIndex = get_validPairs(newSommets,faces)
+    # Gestion Q
+    Q_array[minPair[0]] = minQ
+    Q_array = np.delete(Q_array, minPair[1], axis=0)
 
-    return newSommets,faces,validPairsIndex
+
+    # Remplacer et non recaclculer
+    print('In validPairs')
+    validPairsIndex = gestionValidPairs(validPairsIndex, minPair)
+    print('Out validPairs')
+
+    return sommetsCoords,faces,validPairsIndex, Q_array, validPairsIndex
 
 
 #Ne recalculer que les Q pour les nouveaux points
