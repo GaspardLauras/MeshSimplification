@@ -52,7 +52,7 @@ aretes = get_validPairs(sommetsInit, facesInit)
 aretesInit = copy.deepcopy(aretes)
 
 #Init de la contraction
-Q_array, validPairsIndex = init(sommets, faces)
+Q_array = init(sommets, faces)
 
 #Init de la fenêtre pygame
 pygame.init()
@@ -64,30 +64,23 @@ glEnable(GL_DEPTH_TEST)
 gluPerspective(45, (display[0]/display[1]), 0.1, 50.0)
 glTranslatef(0.0, 0.0, -2*np.max(sommets)-3)
 
-time.sleep(10)
+while pygame.get_init():
+    glRotatef(2, 1, 1, 0)
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
+    #plot_faces(sommets, faces)
+    plot_lines(sommets, aretes)
+    pygame.display.flip()
+    if len(faces)>nfaces:
+        sommets, faces, aretes, Q_array = contraction(sommets, faces, Q_array,aretes)
+    else:
+        pygame.time.wait(20)
 
-while len(faces)>nfaces or pygame.get_init():
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
-            break
-    glRotatef(1, 1, 1, 1)
-    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT)
-    
-    #plot_faces(sommets, faces)
-
-    #Tant que l'on a pas atteint les n faces voulues
-    #On simplifie
-    
-    plot_lines(sommets, aretes)
-    pygame.display.flip()
-
-    if len(faces)>nfaces:
-        sommets, faces, aretes, Q_array, validPairsIndex = contraction(sommets, faces, Q_array,validPairsIndex)
-    else:
-        pygame.time.wait(20)
 
 #Ecriture du résultat dans un fichier
 cells=[('triangle',faces)]
 result = meshio.Mesh(sommets,cells)
 meshio.write("OFF_results/result_"+offName,result)
+
